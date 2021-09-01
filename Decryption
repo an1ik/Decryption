@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+
+
+        static void Main(string[] args)
+        {
+
+            Console.Write("Введите текст: ");
+            string text = Console.ReadLine();
+            text = text.ToLower();
+            string[] textReplace = { "сто", "лов", "ено", "вал", "что", "тал", "про", "вал" };
+            char[] a = text.ToCharArray();
+            List<string> triplet = new List<string>();
+            List<string> nepovtor = new List<string>();
+            int cnt = 0;
+            bool flag= true;
+            bool first = true;
+            string str = "";
+            for (int i = 0; i < a.Length - 3; i++)
+            {
+                if (char.IsLetter(a[i]) & char.IsLetter(a[i + 1]) & char.IsLetter(a[i + 2]))
+                {
+                    if (first == true)
+                    {
+                        nepovtor.Add(Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2]));
+                        first = false;
+                        for (int j = 0; j < a.Length - 3; j++)
+                        {
+                            if (a[i] == a[j] & a[i + 1] == a[j + 1] & a[i + 2] == a[j + 2])
+                            {
+                                if (flag)
+                                {
+                                    str = Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2]);
+                                    flag = false;
+                                }
+                                cnt++;
+
+                            }
+
+                        }
+                        str = str + " " + cnt.ToString();
+                        triplet.Add(str);
+                        nepovtor.Add(Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2]));
+                    }
+                    if (nepovtor.IndexOf(Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2])) < 0)
+                    {
+                        cnt = 0;
+                        flag = true;
+                        for (int j = 0; j < a.Length - 3; j++)
+                        {
+                            if (a[i] == a[j] & a[i + 1] == a[j + 1] & a[i + 2] == a[j + 2])
+                            {
+
+                                if (flag)
+                                {
+                                    str = Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2]);
+                                    flag = false;
+                                }
+                                cnt++;
+
+                            }
+
+                        }
+
+                        str = str + " " + cnt.ToString();
+                        triplet.Add(str);
+                        nepovtor.Add(Char.ToString(a[i]) + Char.ToString(a[i + 1]) + Char.ToString(a[i + 2]));
+                    }
+                }
+
+            }
+
+            string temp;
+
+            for (int i = 0; i < triplet.Count; i++)
+            {
+                for (int j = 0; j < triplet.Count - 1; j++)
+                {
+                    if (int.Parse(triplet[j].Substring(4,1)) < int.Parse(triplet[j + 1].Substring(4,1)))
+                    {
+                        temp = triplet[j];
+                        triplet[j] = triplet[j + 1];
+                        triplet[j + 1] = temp;
+                    }
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("Всего найдено {0} не повторяющихся триграмм, ниже приведены 10 самых частых триграмм.", triplet.Count);
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write(triplet[i].Substring(0, 3) + "; ");
+            }
+            Console.WriteLine();
+            for (int i = 0; i < 8; i++)
+            {
+                text = text.Replace(triplet[i].Substring(0, 3), textReplace[i]);
+            }
+            Console.WriteLine("Дешифровка расширенным частотным анализом: {0}", text);
+            Console.WriteLine("Нажмите любую клавишу для выхода из программы");
+            Console.ReadKey();
+        }
+    }
+}
